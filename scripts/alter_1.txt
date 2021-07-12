@@ -1,18 +1,3 @@
-/*
-	alter_1.txt file
-		-adds primary key constraints
-		-adds foreign key constraints
-		-adds check constraints
-
-	Group 1-
-		Sagun Rupakheti		- 19436773
-		Grishma Duwadi		- 19436758
-		Samyog Rai			- 19436750
-		Prekshya Neupane	- 19436779		
-		
-		@D:\CSY2038_Scripts\DBassignment\alter_1.txt
-
-*/
 
 --------------------------------------Primary Keys--------------------------------------------------------------------
 
