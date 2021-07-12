@@ -1,18 +1,4 @@
-/*
-	alter_test_1.txt file
-			-checks the primary keys
-			-checks the forein keys
-			-checks the check constraints
 
-	Group 1-
-		Sagun Rupakheti		- 19436773
-		Grishma Duwadi		- 19436758
-		Samyog Rai			- 19436750
-		Prekshya Neupane	- 19436779		
-		
-		@D:\CSY2038_Scripts\DBassignment\alter_test_1.txt
-
-*/
 
 
 --displays all primary keys
