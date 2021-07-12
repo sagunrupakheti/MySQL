@@ -5,13 +5,7 @@
 			-inserts in object table
 			-inserted using both parameterized and non-parameterized methods
 			-inserted in object table referencing object table using update 
-			-inserted in varrays and nested tables
-
-	Group 1-
-		Sagun Rupakheti		- 19436773
-		Grishma Duwadi		- 19436758
-		Samyog Rai			- 19436750
-		Prekshya Neupane	- 19436779		
+			-inserted in varrays and nested tables	
 
 		@D:\CSY2038_Scripts\DBassignment\insert_1.txt
 */
