@@ -2,13 +2,6 @@
 	drop_test_1.txt file
 			-checks if the user space system is completely empty 
 
-	Group 1-
-		Sagun Rupakheti		- 19436773
-		Grishma Duwadi		- 19436758
-		Samyog Rai			- 19436750
-		Prekshya Neupane	- 19436779		
-		
-		@D:\CSY2038_Scripts\DBassignment\drop_test_1.txt
 
 */
 -------------------------------------------------
