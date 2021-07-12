@@ -1,0 +1,112 @@
+/*
+	cursors_1.txt file
+		--uses implicit cursors
+		-uses explicit cursors
+		-uses IN
+		-uses OUT
+
+	Group 1-
+		Sagun Rupakheti		- 19436773
+		Grishma Duwadi		- 19436758
+		Samyog Rai			- 19436750
+		Prekshya Neupane	- 19436779		
+		
+		@D:\CSY2038_Scripts\DBassignment\cursors_1.txt
+
+*/
+
+
+------------------------------------------------------------------------------------------
+
+--deletes the address of supplied street 
+CREATE OR REPLACE PROCEDURE proc_imp_delete_street_address(in_street addresses.street%TYPE) IS
+BEGIN
+	DELETE FROM addresses WHERE street= in_street;
+	IF SQL%FOUND THEN
+		DBMS_OUTPUT.PUT_LINE('DELETED ADDRESS');
+	ELSE
+		DBMS_OUTPUT.PUT_LINE('NO SUCH STREET ADDRESS');
+	END IF;
+END;
+/
+SHOW ERRORS;
+-----------------------------------------------------------------------------------------
+
+--update the salary by 50 for all ambassadors
+
+CREATE OR REPLACE PROCEDURE proc_imp_increase_salary(in_salary ambassadors.salary%TYPE) IS
+BEGIN
+--add 50
+	UPDATE ambassadors SET salary = salary + 50 WHERE salary <= in_salary;
+	IF SQL%FOUND THEN
+		DBMS_OUTPUT.PUT_LINE('UPDATED SALARY');
+	ELSE
+		DBMS_OUTPUT.PUT_LINE('NO SUCH SALARY');
+	END IF;
+END;
+/
+SHOW ERRORS;
+
+--------------------------------------------------------------------------------------------
+
+--display all locations using for loop
+CREATE OR REPLACE PROCEDURE proc_exp_cursor_locations IS
+CURSOR cur_location IS
+SELECT l.location_id, l.location_name, l.location_address.street AS street, l.location_address.city AS city, l.location_address.country AS country
+FROM locations l;
+BEGIN
+	FOR rec_cost IN cur_location LOOP
+	DBMS_OUTPUT.PUT_LINE(rec_cost.location_id ||' ,'|| rec_cost.location_name ||' ,'|| rec_cost.street ||' ,'|| rec_cost.city ||' ,'|| rec_cost.country);
+	END LOOP;
+END proc_exp_cursor_locations;
+/
+SHOW ERRORS;
+
+
+---------------------------------------------------------------------------------------------
+--displays salary greater than supplied value
+
+CREATE OR REPLACE PROCEDURE proc_exp_salary(in_salary ambassadors.salary%type) IS
+CURSOR cur_salary IS
+SELECT ambassador_id, ambassador_fname, salary FROM ambassadors 
+WHERE salary>in_salary;
+rec_cost cur_salary%ROWTYPE;
+BEGIN
+	OPEN cur_salary;
+	FETCH cur_salary INTO rec_cost;
+	WHILE cur_salary%FOUND LOOP
+		DBMS_OUTPUT.PUT_LINE(rec_cost.ambassador_id ||' '|| rec_cost.ambassador_fname ||' '|| rec_cost.salary);
+		FETCH cur_salary INTO rec_cost;
+END LOOP;
+END proc_exp_salary;
+/
+SHOW ERRORS;
+
+------------------------------------------------------------------------------------------------------
+
+--prints the salary
+--out_wage variable is used to print the data
+
+CREATE OR REPLACE PROCEDURE proc_calc_wage(in_id IN NUMBER, out_wage OUT NUMBER) IS
+CURSOR cur_calc_wage IS
+SELECT salary, ambassador_fname FROM ambassadors WHERE ambassador_id= in_id;
+rec_salary cur_calc_wage%ROWTYPE;
+BEGIN
+	OPEN cur_calc_wage;
+	FETCH cur_calc_wage INTO rec_salary;
+	out_wage:= rec_salary.salary;
+	DBMS_OUTPUT.PUT_LINE('The salary is : ' || out_wage);
+END proc_calc_wage;
+/
+SHOW ERRORS
+
+---------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+

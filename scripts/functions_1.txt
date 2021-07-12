@@ -1,0 +1,168 @@
+/*
+	functions_1.txt file
+		-has parameterized functions
+		-has non-parameterized functions
+		--counts rows in tables
+		--gives annual salary for the ambassadors
+		--creates username for ambassador
+		--calculates experience expense
+
+
+	Group 1-
+		Sagun Rupakheti		- 19436773
+		Grishma Duwadi		- 19436758
+		Samyog Rai			- 19436750
+		Prekshya Neupane	- 19436779		
+		
+		@D:\CSY2038_Scripts\DBassignment\functions_1.txt
+
+*/
+
+
+
+-------------------------------------------------------------------------------------
+--count experience_natures
+CREATE OR REPLACE FUNCTION func_count_experience_natures RETURN NUMBER IS
+vn_experience_nature_number  NUMBER(7);
+BEGIN
+	SELECT COUNT(experience_nature_id) INTO vn_experience_nature_number
+	FROM experience_natures;
+	
+	RETURN vn_experience_nature_number;
+	
+END func_count_experience_natures;
+/
+SHOW ERRORS
+
+-------------------------------------------------------------------------------------
+--count addresses
+CREATE OR REPLACE FUNCTION func_count_addresses RETURN NUMBER IS
+vn_addresses_number  NUMBER(7);
+BEGIN
+	SELECT COUNT(street) INTO vn_addresses_number
+	FROM addresses;
+	
+	RETURN vn_addresses_number;
+	
+END func_count_addresses;
+/
+SHOW ERRORS
+
+-------------------------------------------------------------------------------------
+--count ambassadors
+CREATE OR REPLACE FUNCTION func_count_ambassadors RETURN NUMBER IS
+vn_ambassadors_number  NUMBER(7);
+BEGIN
+	SELECT COUNT(ambassador_id) INTO vn_ambassadors_number
+	FROM ambassadors;
+	
+	RETURN vn_ambassadors_number;
+	
+END func_count_ambassadors;
+/
+SHOW ERRORS
+
+-------------------------------------------------------------------------------------
+--count locations
+CREATE OR REPLACE FUNCTION func_count_locations RETURN NUMBER IS
+vn_locations_number  NUMBER(7);
+BEGIN
+	SELECT COUNT(location_id) INTO vn_locations_number
+	FROM locations;
+	
+	RETURN vn_locations_number;
+	
+END func_count_locations;
+/
+SHOW ERRORS
+
+-------------------------------------------------------------------------------------
+--count experiences
+CREATE OR REPLACE FUNCTION func_count_experiences RETURN NUMBER IS
+vn_experience_number  NUMBER(7);
+BEGIN
+	SELECT COUNT(location_id) INTO vn_experience_number
+	FROM experiences;
+	
+	RETURN vn_experience_number;
+	
+END func_count_experiences;
+/
+SHOW ERRORS
+
+-------------------------------------------------------------------------------------
+--count experience_ambassadors
+CREATE OR REPLACE FUNCTION func_count_expamb RETURN NUMBER IS
+vn_expamb_number  NUMBER(7);
+BEGIN
+	SELECT COUNT(ambassador_id) INTO vn_expamb_number
+	FROM experience_ambassadors;
+	
+	RETURN vn_expamb_number;
+	
+END func_count_expamb;
+/
+SHOW ERRORS
+
+-------------------------------------------------------------------------------------
+
+--calculates and returns annual salary of an ambassador
+CREATE OR REPLACE FUNCTION func_calc_salary (in_ambassador_id IN ambassadors.ambassador_id%TYPE) 
+RETURN NUMBER IS
+vn_annual_salary 	ambassadors.salary%TYPE;
+vn_monthly_salary 	ambassadors.salary%TYPE;
+BEGIN
+	SELECT salary INTO vn_monthly_salary FROM ambassadors WHERE ambassador_id = in_ambassador_id;
+	
+	vn_annual_salary := vn_monthly_salary* 12;
+	
+	RETURN vn_annual_salary;
+	
+END func_calc_salary;
+/
+SHOW ERRORS
+-------------------------------------------------------------------------------------
+--create a username for an ambassador
+CREATE OR REPLACE FUNCTION 	func_create_username (in_ambassador_id IN ambassadors.ambassador_id%TYPE) 
+RETURN VARCHAR2 IS 
+vn_firstName 	ambassadors.ambassador_fname%TYPE;
+vn_surname   	ambassadors.ambassador_sname%TYPE;
+vn_username 	VARCHAR2(255);
+BEGIN
+	SELECT ambassador_fname INTO vn_firstName 
+	FROM ambassadors 
+	WHERE ambassador_id = in_ambassador_id;
+	
+	SELECT ambassador_sname INTO vn_surname 
+	FROM ambassadors 
+	WHERE ambassador_id = in_ambassador_id;
+	
+	vn_username := CONCAT(SUBSTR(vn_firstName,1,2),SUBSTR(vn_surname,1,2));
+	RETURN vn_username;
+END func_create_username;
+/
+SHOW ERRORS
+
+-------------------------------------------------------------------------------------
+--calculate expense of experince for supplied number of people
+CREATE OR REPLACE FUNCTION func_calc_expense(in_experience_id IN experiences.location_id%TYPE, 
+in_no_of_people IN experiences.no_of_people%TYPE) 
+RETURN NUMBER IS
+
+vn_rate experiences.rate%TYPE;
+vn_expense experiences.rate%TYPE;
+BEGIN
+
+	SELECT rate INTO vn_rate FROM experiences WHERE location_id = in_experience_id;
+	
+	vn_expense:= in_no_of_people* vn_rate;
+	RETURN vn_expense;
+END func_calc_expense;
+/
+SHOW ERRORS
+-------------------------------------------------------------------------------------
+
+
+
+
+

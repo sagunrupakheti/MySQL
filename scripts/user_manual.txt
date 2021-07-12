@@ -1,0 +1,84 @@
+/*
+	user_manual.txt file
+			-consists of instructions for the user
+			
+
+	Group 1-
+		Sagun Rupakheti		- 19436773
+		Grishma Duwadi		- 19436758
+		Samyog Rai			- 19436750
+		Prekshya Neupane	- 19436779		
+		
+		@D:\dbassignment\user_manual.txt
+
+*/
+	
+
+---------------------------------------------------------------
+--create a new user space
+username: sys as sysdba
+--password varies with the system
+password : Nepal123
+
+ALTER SESSION SET "_ORACLE_SCRIPT" = true;
+--any user name and password can be added 
+CREATE USER group1 IDENTIFIED BY group1;
+GRANT ALL PRIVILEGES TO group1;
+
+---------------------------------------------------------------
+--sequence of running files
+--please use the following sequence to run the files
+--to get the correct output 
+
+---------------------------------------------------------------
+
+@D:\CSY2038_Scripts\DBAssignment\create_1.txt
+
+---------------------------------------------------------------
+@D:\CSY2038_Scripts\DBAssignment\create_test_1.txt
+
+---------------------------------------------------------------
+@D:\CSY2038_Scripts\DBAssignment\alter_1.txt
+
+---------------------------------------------------------------
+@D:\CSY2038_Scripts\DBAssignment\alter_test_1.txt
+
+---------------------------------------------------------------
+
+@D:\CSY2038_Scripts\DBAssignment\insert_1.txt
+
+---------------------------------------------------------------
+@D:\CSY2038_Scripts\DBAssignment\queries_1.txt
+
+---------------------------------------------------------------
+@D:\CSY2038_Scripts\DBAssignment\functions_1.txt
+
+---------------------------------------------------------------
+@D:\CSY2038_Scripts\DBAssignment\function_test_1.txt
+
+---------------------------------------------------------------
+@D:\CSY2038_Scripts\DBAssignment\procedures_1.txt
+
+---------------------------------------------------------------
+@D:\CSY2038_Scripts\DBAssignment\procedure_test_1.txt
+
+---------------------------------------------------------------
+@D:\CSY2038_Scripts\DBAssignment\triggers_1.txt
+
+---------------------------------------------------------------
+@D:\CSY2038_Scripts\DBAssignment\trigger_test_1.txt
+
+---------------------------------------------------------------
+@D:\CSY2038_Scripts\DBAssignment\cursors_1.txt
+
+---------------------------------------------------------------
+@D:\CSY2038_Scripts\DBAssignment\cursor_test_1.txt
+
+---------------------------------------------------------------
+@D:\CSY2038_Scripts\DBAssignment\drop_1.txt
+
+---------------------------------------------------------------
+@D:\CSY2038_Scripts\DBAssignment\extra_drop_1.txt
+
+---------------------------------------------------------------
+@D:\CSY2038_Scripts\DBAssignment\drop_test_1.txt

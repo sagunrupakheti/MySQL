@@ -1,0 +1,139 @@
+/*
+	trigger_test_1.txt file
+			-consists of test cases for all the triggers previously made
+			
+
+	Group 1-
+		Sagun Rupakheti		- 19436773
+		Grishma Duwadi		- 19436758
+		Samyog Rai			- 19436750
+		Prekshya Neupane	- 19436779		
+		
+		@D:\CSY2038_Scripts\DBassignment\trigger_test_1.txt
+
+*/
+
+------------------------------------------------------------------------------------------
+
+--for trig_check_ambassador_gender
+--dislays the messages
+
+--for male
+INSERT INTO ambassadors(ambassador_id, ambassador_fname, ambassador_mname, ambassador_sname,
+ gender,salary, date_of_birth, ambassador_address, contact, representative_id)
+ VALUES(seq_ambassador_id.NEXTVAL,'HERMOINE ', 'JULIETTE', 'TRAN', 'M', 102.5,'01-NOV-1999',
+address_type('167 SAFE STREET' ,'KANSAS' ,'USA'),
+ contact_varray_type(
+	contact_type(9873295316,4785475)) , 2);
+	
+--for female	
+INSERT INTO ambassadors(ambassador_id, ambassador_fname, ambassador_mname, ambassador_sname,
+ gender,salary, date_of_birth, ambassador_address, contact, representative_id)
+ VALUES(seq_ambassador_id.NEXTVAL,'TALHA ', '', 'PRATT', 'F', 102.5,'01-NOV-1999',
+address_type('167 SAFE STREET' ,'KANSAS' ,'USA'),
+ contact_varray_type(
+	contact_type(9873295316,4785475)) , 2);	
+
+--false case
+INSERT INTO ambassadors(ambassador_id, ambassador_fname, ambassador_mname, ambassador_sname,
+ gender,salary, date_of_birth, ambassador_address, contact, representative_id)
+ VALUES(seq_ambassador_id.NEXTVAL,'MAZIE', '', 'HAWKINGS', 'S', 102.5,'01-NOV-1999',
+address_type('167 SAFE STREET' ,'KANSAS' ,'USA'),
+ contact_varray_type(
+	contact_type(9873295316,4785475)) , 2);
+	
+------------------------------------------------------------------------------------------------	
+--for trig_check_ambassador_age
+
+--true case
+INSERT INTO ambassadors(ambassador_id,gender, date_of_birth)
+ VALUES(seq_ambassador_id.NEXTVAL, 'M', '01-NOV-1999');		
+ 
+ --false case
+ INSERT INTO ambassadors(ambassador_id,gender, date_of_birth)
+ VALUES(seq_ambassador_id.NEXTVAL, 'M', '01-NOV-2010');	
+ 
+ --------------------------------------------------------------------------------------------
+ 
+ --trig_check_addresses
+ 
+ --false case
+ INSERT INTO addresses(street, city, country)
+VALUES('167 SAFE STREET' ,'KANSAS' ,'USA');
+
+
+--true case
+ INSERT INTO addresses(street, city, country)
+VALUES('167 LANE STREET' ,'BEIJING' ,'CHINA');
+
+----------------------------------------------------------------------------------------------
+--trig_check_location
+
+
+--true case
+INSERT INTO locations(location_id, location_name)
+VALUES(seq_location_id.NEXTVAL, ' HOLLYWOOD');
+
+
+--false case
+INSERT INTO locations(location_id, location_name)
+VALUES(seq_location_id.NEXTVAL, 'NORTH');
+
+------------------------------------------------------------------------------------------------
+
+--trig_check_no_of_people
+
+--true case
+INSERT INTO experiences(experience_type, no_of_people, rate, experience_nature_id, location_id, item)
+VALUES ('BRUNCH',5, 35.2, 1, 2,
+experience_item_table_type(
+experience_item_type('tea', 12),
+experience_item_type('soup', 20)));
+
+
+--false case
+INSERT INTO experiences(experience_type, no_of_people, rate, experience_nature_id, location_id, item)
+VALUES ('BRUNCH',-32, 35.2, 1, ,
+experience_item_table_type(
+experience_item_type('tea', 12),
+experience_item_type('soup', 20)));
+
+------------------------------------------------------------------------------------------------
+
+--trig_check_experience_date
+--true case
+INSERT INTO experience_ambassadors(experience_ambassadors_id, ambassador_id,experience_nature_id,location_id, experience_date)
+VALUES (seq_experience_ambassadors_id.NEXTVAL,1,1,1,'09-MAR-2020');
+
+--false case
+INSERT INTO experience_ambassadors(experience_ambassadors_id, ambassador_id,experience_nature_id,location_id, experience_date)
+VALUES (seq_experience_ambassadors_id.NEXTVAL,1,1,1,'09-MAR-2030');
+
+----------------------------------------------------------------------------------------------------
+
+--trig_display_message
+--insert
+INSERT INTO experience_natures
+(experience_nature_id, experience_nature_name, experience_nature_type)
+VALUES(seq_experience_nature_id.NEXTVAL, 'FOOD', 'indoors');
+
+--update
+UPDATE experience_natures 
+SET experience_nature_name = 'PARAGLIDING'
+WHERE experience_nature_id = 2;
+
+--delete
+DELETE experience_natures
+WHERE experience_nature_id=2;
+
+
+
+---------------------------------------------------------------------------------------------------
+
+--trug_check_date
+--true case
+INSERT INTO experience_ambassadors(experience_ambassadors_id, ambassador_id,experience_nature_id,location_id, experience_date)
+VALUES (seq_experience_ambassadors_id.NEXTVAL,1,1,1,'09-MAR-2020');
+
+INSERT INTO experience_ambassadors(experience_ambassadors_id, ambassador_id,experience_nature_id,location_id, experience_date)
+VALUES (seq_experience_ambassadors_id.NEXTVAL,1,1,1,'09-MAR-2000');

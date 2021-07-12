@@ -1,0 +1,191 @@
+/*
+	procedure_test_1.txt file
+
+			-has parameterized procedures
+			-has non-parameterized procedures
+			-uses loops
+			
+			--insert into tables
+			--delete current value
+			-demonstration of while, exit when, for loop
+			
+
+	Group 1-
+		Sagun Rupakheti		- 19436773
+		Grishma Duwadi		- 19436758
+		Samyog Rai			- 19436750
+		Prekshya Neupane	- 19436779	
+
+			@D:\CSY2038_Scripts\DBassignment\procedures_1.txt
+
+*/
+----------------------------------------------------------------------------------
+
+--simple procedure for inserting in experience_natures table (not parameterized)
+CREATE OR REPLACE PROCEDURE proc_add_experience_nature IS
+
+vc_experience_nature_name experience_natures.experience_nature_name%TYPE;
+vc_experience_nature_type experience_natures.experience_nature_type%TYPE;
+
+BEGIN
+vc_experience_nature_name :='ADVENTURE';
+vc_experience_nature_type := 'outdoors';
+
+	INSERT INTO experience_natures(experience_nature_id, experience_nature_name, experience_nature_type)
+	VALUES( seq_experience_nature_id.nextval,vc_experience_nature_name,vc_experience_nature_type);
+	DBMS_OUTPUT.PUT_LINE('********************');
+	DBMS_OUTPUT.PUT_LINE('INSERTION SUCESSFUL');
+	
+END proc_add_experience_nature;
+/
+SHOW ERRORS;
+
+----------------------------------------------------------------------------------
+--simple procedure for insertion in address table
+
+CREATE OR REPLACE PROCEDURE proc_add_address IS
+vc_street 	addresses.street%TYPE;
+vc_city   	addresses.city%TYPE;
+vc_country 	addresses.country%TYPE;
+
+BEGIN
+vc_street := 'BANESHWOR';
+vc_city := 'KATHMANDU';
+vc_country := 'NEPAL';
+
+	INSERT INTO addresses(street, city, country)
+	VALUES(vc_street, vc_city, vc_country);
+	DBMS_OUTPUT.PUT_LINE('*******************');
+	DBMS_OUTPUT.PUT_LINE('INSERTION SUCESSFUL');
+	
+END proc_add_address;
+/
+SHOW ERRORS
+------------------------------------------------------------------------------------------------------
+--USING EXCEPTION
+
+
+CREATE OR REPLACE PROCEDURE proc_display_expinfo(experience_name experiences.experience_type%TYPE) IS
+vc_exp_type experiences.experience_type%TYPE;
+vc_exp_nature experience_natures.experience_nature_name%TYPE;
+vc_location_name locations.location_name%TYPE;
+vc_address locations.location_name%TYPE;
+
+BEGIN
+	SELECT e.experience_nature_name, ex.experience_type, l.location_name, l.location_address.country
+	INTO vc_exp_nature, vc_exp_type, vc_location_name, vc_address
+	FROM experience_natures e  
+	JOIN experiences ex
+	ON e.experience_nature_id = ex.experience_nature_id
+	JOIN locations l
+	ON l.location_id = ex.location_id
+	WHERE ex.experience_type= experience_name;
+	
+	DBMS_OUTPUT.PUT_LINE('EXPERIENCE NATURE NAME: '|| vc_exp_nature);
+	DBMS_OUTPUT.PUT_LINE('EXPERIENCE TYPE: '|| vc_exp_type);
+	DBMS_OUTPUT.PUT_LINE('LOCATION: '|| vc_location_name);
+	DBMS_OUTPUT.PUT_LINE('ADDRESS: '|| vc_address);
+	
+EXCEPTION
+	WHEN no_data_found THEN
+		DBMS_OUTPUT.PUT_LINE('****************************');
+		RAISE_APPLICATION_ERROR (-20000,'INVALID EXPERIENCE NAME');
+	WHEN OTHERS THEN
+		DBMS_OUTPUT.PUT_LINE('*************************');
+		RAISE_APPLICATION_ERROR (-20000,'UNDEFINED ERROR');
+END proc_display_expinfo;
+/
+
+SHOW ERRORS
+
+----------------------------------------------------------------------------------
+
+
+--simple procedure for table experience_nature for deleting the latest record
+
+CREATE OR REPLACE PROCEDURE proc_delete_experience_nature IS
+
+vn_experience_nature_id experience_natures.experience_nature_id%TYPE;
+
+BEGIN
+
+	SELECT seq_experience_nature_id.CURRVAL INTO vn_experience_nature_id FROM DUAL;
+	
+	DELETE FROM experience_natures WHERE experience_nature_id = vn_experience_nature_id;
+	
+	DBMS_OUTPUT.PUT_LINE('*******************');
+	DBMS_OUTPUT.PUT_LINE('DELETION SUCCESSFUL');
+	
+END proc_delete_experience_nature;
+/
+SHOW ERRORS;
+----------------------------------------------------------------------------------
+
+--procedure for displaying the last name of ambassador in a loop of a given id exit when loop
+
+CREATE OR REPLACE PROCEDURE proc_ambassador_last_name(in_ambassador_id IN ambassadors.ambassador_id%TYPE) IS
+vn_letter_counter 	NUMBER(11):=1;
+vn_length_lastname 	NUMBER(11);
+vc_lastname VARCHAR2(255);
+
+BEGIN
+	SELECT ambassador_sname INTO vc_lastname FROM ambassadors WHERE ambassador_id = in_ambassador_id;
+	
+	vn_length_lastname:= LENGTH(vc_lastname);
+	DBMS_OUTPUT.PUT_LINE('-------LASTNAME-------');
+	LOOP
+		EXIT WHEN vn_letter_counter > vn_length_lastname;
+			DBMS_OUTPUT.PUT_LINE(SUBSTR(vc_lastname, vn_letter_counter, 1));
+			vn_letter_counter:=vn_letter_counter+1;
+	END LOOP;
+END proc_ambassador_last_name;
+/ 
+SHOW ERRORS;
+----------------------------------------------------------------------------------
+
+--procedure for showing middle name using while loop
+CREATE OR REPLACE PROCEDURE proc_ambassador_middle_name (in_ambassador_id IN ambassadors.ambassador_id%TYPE) IS
+vn_letter_counter 	NUMBER(11):=1;
+vn_length_middlename 	NUMBER(11);
+vc_middlename VARCHAR2(255);
+BEGIN
+
+	SELECT ambassador_mname INTO vc_middlename FROM ambassadors WHERE ambassador_id = in_ambassador_id;
+	vn_length_middlename := LENGTH(vc_middlename);
+	DBMS_OUTPUT.PUT_LINE('-------MIDDLENAME-------');
+	WHILE vn_letter_counter <= vn_length_middlename LOOP
+		DBMS_OUTPUT.PUT_LINE(SUBSTR(vc_middlename, vn_letter_counter, 1));
+		vn_letter_counter:=vn_letter_counter+1;
+	END LOOP;
+END;
+/
+SHOW ERRORS;
+	
+----------------------------------------------------------------------------------
+--procedure for showing the firstname of ambassador using for loop
+
+CREATE OR REPLACE PROCEDURE proc_ambassador_first_name (in_ambassador_id IN ambassadors.ambassador_id%TYPE) IS
+vn_length_firstname NUMBER(3);
+vn_letter_counter NUMBER(4):=1;
+vc_firstname VARCHAR2(255);
+
+BEGIN
+	SELECT ambassador_fname INTO vc_firstname FROM ambassadors WHERE ambassador_id= in_ambassador_id;
+	vn_length_firstname := LENGTH(vc_firstname);
+	DBMS_OUTPUT.PUT_LINE('-------SURNAME-------');
+	FOR counter IN 1..vn_length_firstname LOOP
+		DBMS_OUTPUT.PUT_LINE(SUBSTR(vc_firstname, vn_letter_counter, 1));
+		vn_letter_counter:=vn_letter_counter+1;
+	END LOOP;
+END proc_ambassador_first_name;
+/
+SHOW ERRORS;
+
+
+
+
+
+
+
+
+

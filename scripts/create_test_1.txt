@@ -1,0 +1,33 @@
+/*
+	create_test_1.txt file
+			-checks the table names
+			-checks the created table with attributes
+			-checks the sequences
+
+	Group 1-
+		Sagun Rupakheti		- 19436773
+		Grishma Duwadi		- 19436758
+		Samyog Rai			- 19436750
+		Prekshya Neupane	- 19436779		
+		
+		@D:\CSY2038_Scripts\DBassignment\create_test_1.txt
+
+*/
+
+
+--displays all the tables created in the user space
+SELECT tname from tab;
+
+--check tables along with their attributes
+DESC ambassadors;
+DESC experience_natures;
+DESC locations
+DESC experiences;
+DESC experience_ambassadors;
+
+--object table
+DESC addresses;
+
+--displays all the sequences
+SELECT sequence_name 
+FROM user_sequences;

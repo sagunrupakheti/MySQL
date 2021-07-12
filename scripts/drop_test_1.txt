@@ -1,0 +1,51 @@
+/*
+	drop_test_1.txt file
+			-checks if the user space system is completely empty 
+
+	Group 1-
+		Sagun Rupakheti		- 19436773
+		Grishma Duwadi		- 19436758
+		Samyog Rai			- 19436750
+		Prekshya Neupane	- 19436779		
+		
+		@D:\CSY2038_Scripts\DBassignment\drop_test_1.txt
+
+*/
+-------------------------------------------------
+--check if tables are removed
+SELECT tname from tab;
+
+-------------------------------------------------
+--check if sequences are removed
+SELECT sequence_name 
+FROM user_sequences;
+
+-------------------------------------------------
+--check if all primary keys removed
+SELECT constraint_name FROM user_constraints 
+WHERE constraint_name LIKE 'PK%' ;
+
+-------------------------------------------------
+--check if all foreign keys removed
+SELECT constraint_name FROM user_constraints 
+WHERE constraint_name LIKE 'FK%' ;
+
+-------------------------------------------------
+
+--check if all check constraints removed
+SELECT constraint_name FROM user_constraints 
+WHERE constraint_name LIKE 'CK%' ;
+
+-------------------------------------------------
+
+--check types
+SELECT object_name, object_type FROM user_objects
+WHERE object_type = 'TYPE';
+
+------------------------------------------------
+--check objects
+SELECT object_name FROM user_objects;
+
+------------------------to run in the end---------------------------------------
+--COLUMN object_name FORMAT A30;
+--COLUMN object_type FORMAT A12;

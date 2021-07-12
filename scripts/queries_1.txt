@@ -1,0 +1,419 @@
+--querying with objects and collection types
+
+--join query--inner outer full join
+
+
+/*
+	insert_1.txt file
+			-queries all tables
+			-queries using inner join
+			-queries using left join
+			-queries using full outer join
+			-queries using set operators like INTERSECT, UNION, MINUS, 
+			--queries using numeric functions like ROUND, CEIL ,FLOOR, MOD, SQRT, TRUNC, REMAINDER, POWER
+			--queries using character functions like CONCAT, INITCAP, LOWER UPPER, TRIM, LENGTH, INSTR
+			--queries using statistical functions MAX, AVG, SUM, COUNT, MIN
+			--queries using DML functions like IN, ALL, LIKE, ANY, SOME
+			--queries using group by and having clause
+
+	Group 1-
+		Sagun Rupakheti		- 19436773
+		Grishma Duwadi		- 19436758
+		Samyog Rai			- 19436750
+		Prekshya Neupane	- 19436779		
+		
+		@D:\CSY2038_Scripts\DBassignment\queries_1.txt
+
+*/
+
+
+
+
+--------------------------------------------------experience_natures--------------------------------------------------
+--query entire experience_natures table
+--set size for the columns
+COLUMN experience_nature_name FORMAT A15;
+COLUMN experience_nature_type FORMAT A15;
+
+SELECT experience_nature_id , experience_nature_name , experience_nature_type  FROM experience_natures;
+
+
+
+--------------------------------------------------addresses-------------------------------------------------------------
+
+--size of the columns
+COLUMN street FORMAT A20;
+COLUMN city FORMAT A15;
+COLUMN country FORMAT A15;
+
+--query entire addresses table
+
+
+SELECT * FROM addresses;
+
+
+--returns all the street, city and country that are both in addresses table and in locations table
+	SELECT street,city,country
+	FROM addresses
+	WHERE (street IN
+		(SELECT l.location_address.street
+		FROM locations l) 
+		AND city IN
+			(SELECT l.location_address.city
+			FROM locations l)
+			AND country IN (
+				SELECT l.location_address.country
+				FROM locations l));
+				
+					
+----------------------------------------------------ambassadors--------------------------------------------------------
+--query entire ambassadors table
+
+--format the columns
+COLUMN FNAME FORMAT A10;
+COLUMN MNAME FORMAT A5;
+COLUMN SNAME FORMAT A10;
+COLUMN gender FORMAT A6;
+COLUMN PERSONAL FORMAT A10;
+COLUMN EXTRA FORMAT A10;
+
+--query without the objects
+SELECT ambassador_id AS ID, ambassador_fname AS FNAME, ambassador_mname AS MNAME, 
+ambassador_sname AS SNAME, gender, salary , EXTRACT(YEAR FROM date_of_birth) AS DOB, representative_id AS REP_ID
+FROM ambassadors a,
+TABLE(a.contact)c;
+
+--address object table query
+SELECT ambassador_id AS ID, a.ambassador_address.street AS street, a.ambassador_address.city AS city , a.ambassador_address.country AS country
+FROM ambassadors a;
+
+--contact varray query
+SELECT  ambassador_id AS ID, c.personal_number, c.additional_number 
+FROM ambassadors a,
+TABLE(a.contact)c ;
+
+--ambassador Nests for Pseudo Tables query 
+
+SELECT ambassador_id AS ID, ambassador_fname AS FNAME, ambassador_mname AS MNAME, 
+ambassador_sname AS SNAME, gender, salary , date_of_birth AS DOB, representative_id AS REP_ID
+FROM ambassadors a
+WHERE exists(
+	SELECT ambassador_id FROM ambassadors am
+	WHERE representative_id IS NOT NULL
+	AND a.representative_id = am.ambassador_id
+	AND a.salary = am.salary);
+
+
+--both contact type and address type
+SELECT a.ambassador_id AS ID, a.gender, a.salary, c.personal_number AS PERSONAL, a.ambassador_address.country AS "COUNTRY"
+FROM ambassadors a,
+TABLE(contact)c;
+
+
+----------------------------------------------------locations-------------------------------------------------------------------
+--query entire location table
+COLUMN  location_name FORMAT   A15 ;
+COLUMN street FORMAT A15;
+COLUMN city FORMAT A15; 
+COLUMN country FORMAT A15; 
+
+--using pseudo names for columns
+SELECT location_id AS id , location_name AS name, l.location_address.street AS street, 
+l.location_address.city AS city , l.location_address.country AS country FROM locations l;
+
+--using deref to query object table
+SELECT DEREF (location_address), location_id
+FROM locations     l
+WHERE l.location_id = 2;
+
+
+----------------------------------------------------experiences-------------------------------------------------------------------
+--experiences
+COLUMN experience_type FORMAT A13; 
+
+SELECT location_id, experience_type, no_of_people AS "people", rate, experience_nature_id AS "exp_id", location_id AS "loc_id" 
+FROM experiences;
+
+--items nested table query
+SELECT i.item_name, i.cost
+FROM experiences e,
+TABLE(e.item)i ;
+-----------------------------------------------------experience_ambassadors-------------------------------------------------------------------
+COLUMN experience_date FORMAT A30;
+
+
+SELECT  ambassador_id, experience_date, location_id, experience_nature_id FROM experience_ambassadors;
+
+---------------------------------------------------------SET OPERATORS-----------------------------------------------------------
+
+--RETURNS THE CITIES IF THE COUNTRY USA IS COMMON 
+
+SELECT l.location_address.city
+FROM locations  l
+WHERE l.location_address.country= 'USA'
+INTERSECT
+SELECT a.ambassador_address.city
+FROM ambassadors a
+WHERE a.ambassador_address.country = 'USA';
+--hawaii
+--kansas
+
+--union
+SELECT l.location_address.city
+FROM locations  l
+WHERE l.location_address.country= 'NEPAL'
+UNION
+SELECT a.ambassador_address.city
+FROM ambassadors a
+WHERE a.ambassador_address.country = 'NEPAL';
+--kathmandu 
+--pokhara
+
+--minus
+SELECT l.location_address.street
+FROM locations  l
+WHERE l.location_address.country= 'NEPAL'
+MINUS
+SELECT a.ambassador_address.street
+FROM ambassadors a
+WHERE a.ambassador_address.country = 'NEPAL';
+
+--no rows selected
+
+---------------------------------------------------------DML FUNCTIONS----------------------------------------------------------
+
+
+
+--all addresses whose country's beigns with the letter N
+SELECT street as Street, city as City, country as Country
+FROM addresses
+WHERE country LIKE 'N%';
+
+--all addresses whose country's beigns has A in between
+SELECT street as Street, city as City, country as Country
+FROM addresses
+WHERE country LIKE '%A%';
+
+--all addresses whose country's ends with the letter L
+SELECT street as Street, city as City, country as Country
+FROM addresses
+WHERE country LIKE '%L';
+
+--either nepal or india using IN operator
+SELECT street, country 
+FROM addresses
+WHERE country IN ('NEPAL', 'INDIA');
+
+--using OR operator
+SELECT  city, country 
+FROM addresses
+WHERE  country = 'NEPAL'
+OR country = 'INDIA';
+
+
+--using ALL operator
+SELECT experience_type, rate
+FROM experiences
+WHERE rate > ALL (0, 10);
+
+--using ANY operator
+SELECT experience_type, rate
+FROM experiences
+WHERE rate > ANY (0, 10);
+
+--using SOME operator
+SELECT experience_type, rate
+FROM experiences
+WHERE rate > SOME (0, 10);
+
+--using BETWEEN operator
+SELECT ambassador_fname, salary 
+FROM ambassadors
+WHERE salary 
+BETWEEN '0' 
+AND '1000';
+
+
+---------------------------------------------------------STATISTICAL FUNCTIONS--------------------------------------------------
+
+
+--using MAX function
+SELECT MAX(salary) FROM ambassadors;
+
+--highest salary details
+SELECT a.ambassador_id, a.ambassador_fname, a.ambassador_sname, a.salary
+FROM ambassadors a
+WHERE a.salary IN(
+	SELECT MAX(salary) FROM ambassadors);
+
+--using AVG function
+SELECT AVG(salary)FROM ambassadors;
+
+--using SUM function
+SELECT SUM(rate) FROM experiences;
+
+--using COUNT function
+SELECT COUNT(ambassador_id) FROM experience_ambassadors;
+
+--using MIN function
+SELECT MIN(no_of_people) FROM experiences;
+
+--details of minimum salary
+SELECT a.ambassador_id, a.ambassador_fname, a.ambassador_sname, a.salary
+FROM ambassadors a
+WHERE a.salary IN(
+	SELECT MIN(salary) FROM ambassadors);
+
+
+---------------------------------------------------------GROUP BY AND HAVING FUNCTION---------------------------------------------
+
+--using MAX function and GROUP BY
+SELECT MAX(salary), ambassador_fname
+FROM ambassadors
+GROUP BY ambassador_fname;
+
+
+--using SUM function and GROUP BY
+SELECT SUM(salary), gender
+FROM ambassadors
+GROUP BY gender;
+
+--using AVG function and HAVING clause
+SELECT AVG(salary),ambassador_fname
+FROM ambassadors
+GROUP BY ambassador_fname
+HAVING AVG(salary)>300;
+
+
+-------------------------------------------------------NUMERIC FUNCTIONS---------------------------------------------------------
+
+--USING ROUND FUNCTION
+SELECT ROUND(rate,2), no_of_people
+FROM experiences;
+
+--USING CEIL FUNCTION
+SELECT CEIL(rate), no_of_people
+FROM experiences;
+
+--USING FLOOR FUNCTION
+SELECT FLOOR(rate) , no_of_people
+FROM experiences;
+
+--USING MOD FUNCTION
+SELECT MOD(salary,1) 
+FROM ambassadors
+WHERE ambassador_id =1; 
+
+--USING REMAINDER FUNCTION
+SELECT REMAINDER(rate,1) 
+FROM experiences
+WHERE location_id= 1;
+
+--USING POWER FUNCTION
+SELECT POWER(rate,2) 
+FROM experiences;
+
+--USING SQRT FUNCTION
+SELECT SQRT(rate,2) 
+FROM experiences;
+
+--USING TRUNC FUNCTION
+SELECT TRUNC(salary,2) 
+FROM ambassadors;
+
+
+
+--------------------------------------------------------CHARACTER FUNCTIONS---------------------------------------------------------
+
+--USING CONCAT FUNCTION 
+--concats two strings
+SELECT CONCAT(ambassador_fname, ambassador_sname)
+FROM ambassadors
+WHERE ambassador_fname LIKE 'S%';
+
+--USING INITCAP
+--returns first letter of the name in upper case
+SELECT INITCAP(experience_nature_name) 
+FROM experience_natures;
+
+--USING LOWER
+--displayes in lowercase
+SELECT LOWER(experience_nature_type) 
+FROM experience_natures;
+
+--USING UPPER	
+--displays in upper case
+SELECT UPPER(experience_nature_type) 
+FROM experience_natures;
+
+--USING TRIM FOR LEADING CHARACTER
+--removes the leading character
+SELECT TRIM(LEADING 'K' FROM city) AS city, street, country
+FROM addresses
+WHERE country = 'NEPAL';
+
+--USING TRIM FOR TRAILING CHARACTER
+--removes the trailing character
+SELECT TRIM(TRAILING 'A' FROM country) AS country, street, city
+FROM addresses
+WHERE country= 'INDIA';
+
+--USING LENGTH 
+--finds the length of the string
+SELECT LENGTH(street) AS LENGTH, street
+FROM addresses
+WHERE COUNTRY = 'NEPAL';
+
+
+--using INSTR 
+--finds the position of the character in the string
+SELECT INSTR( location_name ,'O', 1, 1), location_name
+FROM locations
+WHERE location_id = 2; 
+
+ 
+---------------------------------------------------------JOINS-------------------------------------------------------------------
+--set the column
+COLUMN EXP_TYPE FORMAT A15;
+
+
+--multiple inner join
+SELECT e.experience_nature_name, ex.experience_type  AS "EXP_TYPE", l.location_name
+FROM experience_natures e  
+JOIN experiences ex
+ON e.experience_nature_id = ex.experience_nature_id
+JOIN locations l
+ON l.location_id = ex.location_id
+WHERE ex.experience_nature_id=1;
+
+
+
+--multiple left join
+SELECT e.experience_date, ex.experience_type AS "EXP_TYPE", am.ambassador_fname AS "FNAME"
+FROM experience_ambassadors e  
+LEFT JOIN experiences ex
+ON e.location_id = ex.location_id
+LEFT JOIN ambassadors am
+ON am.ambassador_id = e.ambassador_id
+WHERE e.experience_ambassadors_id=1;
+
+--multiple right join
+SELECT e.experience_date AS "DATE", ex.experience_type AS "EXP_TYPE", am.ambassador_fname AS "FNAME"
+FROM experience_ambassadors e  
+RIGHT JOIN experiences ex
+ON e.location_id = ex.location_id
+RIGHT JOIN ambassadors am
+ON am.ambassador_id = e.ambassador_id
+WHERE e.experience_ambassadors_id=1;
+
+
+--full outer join
+SELECT a.ambassador_fname AS "FNAME", ea.experience_date AS "DATE"
+FROM ambassadors a
+FULL OUTER JOIN experience_ambassadors  ea
+ON a.ambassador_id = ea.ambassador_id ; 
+
+
+
+
+

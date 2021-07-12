@@ -1,0 +1,44 @@
+/*
+	cursors_test_1.txt file
+		--test cases for implicit cursors
+		-test cases for explicit cursors
+
+	Group 1-
+		Sagun Rupakheti		- 19436773
+		Grishma Duwadi		- 19436758
+		Samyog Rai			- 19436750
+		Prekshya Neupane	- 19436779		
+		
+		@D:\CSY2038_Scripts\DBassignment\cursor_test_1.txt
+
+*/
+
+--to show the output 
+SET SERVEROUTPUT ON
+---------------------------------------------------------
+--for proc_imp_delete_street_address
+
+EXECUTE proc_imp_delete_street_address('001 PQR STREET');
+
+------------------------------------------------------------
+
+--for proc_imp_increase_salary
+
+EXECUTE proc_imp_increase_salary(600);
+
+----------------------------------------------------------
+
+--for proc_exp_cursor_locations
+EXECUTE proc_exp_cursor_locations;
+
+
+----------------------------------------------------------
+--for proc_exp_salary
+EXECUTE proc_exp_salary(300);
+
+----------------------------------------------------------
+--for proc_calc_wage
+VAR WAGE NUMBER;
+
+EXECUTE proc_calc_wage(1, :WAGE);
+

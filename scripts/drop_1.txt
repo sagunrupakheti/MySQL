@@ -1,0 +1,112 @@
+/*
+	drop_1.txt 
+	
+	-drops all the tables, constraints, sequences in order
+	-drops the child table related constraints first
+	-followed by the parent table related constraints and tables
+	-to maintain the integrity of constraints
+	
+	GROUP 1- 
+
+		Sagun Rupakheti		- 19436773
+		Grishma Duwadi		- 19436758
+		Samyog Rai			- 19436750
+		Prekshya Neupane	- 19436779	
+		
+		@D:\CSY2038_Scripts\DBassignment\drop_1.txt
+*/
+
+--show messages
+SET SERVEROUTPUT ON
+
+
+--if triggers not dropped first will be dropped along with the table it is associated with
+-----------------------------------------DROP TRIGGERS-------------------------------------------------------------
+DROP TRIGGER trig_check_ambassador_gender;
+DROP TRIGGER trig_check_ambassador_age;
+DROP TRIGGER trig_check_addresses;
+DROP TRIGGER trig_check_location;
+DROP TRIGGER trig_check_no_of_people;
+DROP TRIGGER trig_check_experience_date;
+DROP TRIGGER trig_display_message;
+DROP TRIGGER trig_check_date;
+----------------------------------------------DROP FOREIGN KEYS---------------------------------------------------
+
+ALTER TABLE experience_ambassadors
+DROP CONSTRAINT fk_a_ambassadors;
+
+ALTER TABLE experience_ambassadors
+DROP CONSTRAINT fk_am_experiences;
+
+ALTER TABLE experiences
+DROP CONSTRAINT fk_e_locations;
+
+ALTER TABLE experiences
+DROP CONSTRAINT fk_e_experience_natures;
+
+
+----------------------------------------------DROP PRIMARY KEYS--------------------------------------------
+ALTER TABLE experience_ambassadors
+DROP CONSTRAINT pk_experiences_ambassadors;
+
+ALTER TABLE locations
+DROP CONSTRAINT pk_locations;
+
+ALTER TABLE ambassadors
+DROP CONSTRAINT pk_ambassadors;
+
+ALTER TABLE experiences
+DROP CONSTRAINT pk_experiences;
+
+ALTER TABLE experience_natures
+DROP CONSTRAINT pk_experience_natures;
+
+-------------------------------------------DROP CHECK CONSTRAINTS--------------------------------------------
+
+
+ALTER TABLE experience_natures
+DROP CONSTRAINT  ck_e_experience_natures;
+
+ALTER TABLE ambassadors
+DROP CONSTRAINT  ck_a_ambassadors_fname;
+
+
+ALTER TABLE ambassadors
+DROP CONSTRAINT  ck_a_ambassadors_mname;
+
+ALTER TABLE ambassadors
+DROP CONSTRAINT  ck_a_ambassadors_sname;
+
+
+
+-----------------------------------------DROP TABLES----------------------------------------------------------
+DROP TABLE experience_ambassadors;
+
+DROP TABLE experiences;
+
+DROP TABLE locations;
+
+DROP TABLE ambassadors;
+
+DROP TABLE addresses;
+
+DROP TABLE experience_natures;
+
+
+--------------------------------------DROP OBJECT TYPES-------------------------------------------------------
+
+DROP TYPE experience_item_table_type;
+DROP TYPE experience_item_type;
+DROP TYPE contact_varray_type;
+DROP TYPE contact_type;
+DROP TYPE address_type;
+
+------------------------------------DROP SEQUENCES--------------------------------------
+
+DROP SEQUENCE seq_experience_ambassadors_id;
+DROP SEQUENCE seq_location_id;
+DROP SEQUENCE seq_ambassador_id;
+DROP SEQUENCE seq_experience_nature_id;
+
+--permanently delete 
+PURGE RECYCLEBIN;

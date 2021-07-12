@@ -1,0 +1,61 @@
+/*
+	extra_drop_1.txt file
+			-drops for functions
+			-drops for procedures
+			-triggers already dropped along with table
+			-drops for cursors
+
+	Group 1-
+		Sagun Rupakheti		- 19436773
+		Grishma Duwadi		- 19436758
+		Samyog Rai			- 19436750
+		Prekshya Neupane	- 19436779		
+		
+		@D:\CSY2038_Scripts\DBassignment\extra_drop_1.txt
+
+*/
+
+
+--------------------------------------------drop procedures for functions----------------------------------
+DROP PROCEDURE proc_count_experience_natures;
+DROP PROCEDURE proc_count_addresses;
+DROP PROCEDURE proc_count_ambassadors;
+DROP PROCEDURE proc_count_locations;
+DROP PROCEDURE proc_count_experiences;
+DROP PROCEDURE proc_count_exp_ambassadors;
+DROP PROCEDURE proc_display_expinfo;
+DROP PROCEDURE proc_calc_salary;
+DROP PROCEDURE proc_create_amb_username;
+DROP PROCEDURE proc_calc_experience_expense;
+
+--------------------------------------------drop procedures------------------------------------------------
+
+DROP PROCEDURE proc_add_experience_nature;
+DROP PROCEDURE proc_add_address;
+DROP PROCEDURE proc_delete_experience_nature;
+DROP PROCEDURE proc_ambassador_last_name;
+DROP PROCEDURE proc_ambassador_middle_name;
+DROP PROCEDURE proc_ambassador_first_name;
+
+
+
+--------------------------------------------drop functions------------------------------------------------
+DROP FUNCTION func_count_experience_natures;
+DROP FUNCTION func_count_addresses;
+DROP FUNCTION func_count_ambassadors;
+DROP FUNCTION func_count_locations;
+DROP FUNCTION func_count_experiences;
+DROP FUNCTION func_count_expamb;
+DROP FUNCTION func_calc_salary;
+DROP FUNCTION func_create_username;
+DROP FUNCTION func_calc_expense;
+
+
+--------------------------------------------drop procedures containing cursors------------------------------
+DROP PROCEDURE proc_imp_delete_street_address;
+DROP PROCEDURE proc_imp_increase_salary;
+DROP PROCEDURE proc_exp_cursor_locations;
+DROP PROCEDURE proc_exp_salary;
+DROP PROCEDURE proc_calc_wage;
+
+

@@ -1,0 +1,191 @@
+/*
+	function_test_1.txt file
+			-has parameterized procedures for functions
+			-has non-parameterized procedures for functions
+			-has execute statements
+
+	Group 1-
+		Sagun Rupakheti		- 19436773
+		Grishma Duwadi		- 19436758
+		Samyog Rai			- 19436750
+		Prekshya Neupane	- 19436779		
+		
+		@D:\CSY2038_Scripts\DBassignment\function_test_1.txt
+
+*/
+
+
+--for showing the output
+
+SET SERVEROUTPUT ON;
+
+----------------------------------------------------------------------------------------------
+--count experience_natures
+
+CREATE OR REPLACE PROCEDURE proc_count_experience_natures IS
+vn_exp_nature_number  NUMBER(7);
+
+BEGIN
+	vn_exp_nature_number:= func_count_experience_natures();
+	DBMS_OUTPUT.PUT_LINE('**************************************************************');
+	DBMS_OUTPUT.PUT_LINE('Total number of experience natures: '||vn_exp_nature_number);
+	
+END proc_count_experience_natures;
+/ 
+SHOW ERRORS;
+
+
+
+------------------------------------------------------------------------------------------------
+--count addresses
+CREATE OR REPLACE PROCEDURE proc_count_addresses IS
+vn_address_number  NUMBER(7);
+
+BEGIN
+	vn_address_number:= func_count_addresses();
+	DBMS_OUTPUT.PUT_LINE('**************************************************************');
+	DBMS_OUTPUT.PUT_LINE('Total number of addresses: '||vn_address_number);
+	
+END proc_count_addresses;
+/ 
+SHOW ERRORS;
+
+
+-------------------------------------------------------------------------------------------------
+
+--count ambassadors
+CREATE OR REPLACE PROCEDURE proc_count_ambassadors IS
+vn_ambassador_number  NUMBER(7);
+
+BEGIN
+	vn_ambassador_number:= func_count_ambassadors();
+	DBMS_OUTPUT.PUT_LINE('**************************************************************');
+	DBMS_OUTPUT.PUT_LINE('Total number of ambassadors: '||vn_ambassador_number);
+	
+END proc_count_ambassadors;
+/ 
+SHOW ERRORS;
+--execute the procedure
+
+
+--------------------------------------------------------------------------------------------------
+
+--count locations
+CREATE OR REPLACE PROCEDURE proc_count_locations  IS
+vn_location_number  NUMBER(7);
+
+BEGIN
+	vn_location_number:= func_count_locations();
+	DBMS_OUTPUT.PUT_LINE('**************************************************************');
+	DBMS_OUTPUT.PUT_LINE('Total number of locations: '||vn_location_number);
+	
+END proc_count_locations;
+/ 
+SHOW ERRORS;
+
+
+---------------------------------------------------------------------------------------------------
+
+--count experiences
+CREATE OR REPLACE PROCEDURE proc_count_experiences IS
+vn_experience_number  NUMBER(7);
+
+BEGIN
+	vn_experience_number:= func_count_experiences();
+	DBMS_OUTPUT.PUT_LINE('**************************************************************');
+	DBMS_OUTPUT.PUT_LINE('Total number of experience natures: '||vn_experience_number);
+	
+END proc_count_experiences;
+/ 
+SHOW ERRORS;
+
+
+----------------------------------------------------------------------------------------------------
+--count experience_ambassadors
+CREATE OR REPLACE PROCEDURE proc_count_exp_ambassadors IS
+vn_exp_amb_number  NUMBER(7);
+
+BEGIN
+	vn_exp_amb_number:= func_count_expamb();
+	DBMS_OUTPUT.PUT_LINE('**************************************************************');
+	DBMS_OUTPUT.PUT_LINE('Total number of experience natures: '||vn_exp_amb_number);
+	
+END proc_count_exp_ambassadors;
+/ 
+SHOW ERRORS;
+
+
+-------------------------------------------------------------------------------------------------------
+
+
+--displays the annual salary of an ambassador
+CREATE OR REPLACE PROCEDURE proc_calc_salary(in_ambassador_id IN ambassadors.ambassador_id%TYPE) IS
+
+vn_annual_salary ambassadors.salary%TYPE;
+vc_name 		ambassadors.ambassador_fname%TYPE;
+
+BEGIN
+
+	vn_annual_salary := func_calc_salary(in_ambassador_id);
+	SELECT ambassador_fname INTO vc_name FROM ambassadors WHERE ambassador_id = in_ambassador_id;
+	DBMS_OUTPUT.PUT_LINE('**************************************************************');
+	DBMS_OUTPUT.PUT_LINE('The annual salary of '|| vc_name ||' is:  £' || vn_annual_salary);
+	
+END proc_calc_salary;
+/
+SHOW ERRORS;
+
+	
+------------------------------------------------------------------------------------------------------------------
+
+
+--displays the username for the ambassador
+CREATE OR REPLACE PROCEDURE proc_create_amb_username (in_ambassador_id IN ambassadors.ambassador_id%TYPE) IS
+vn_username 	VARCHAR2(255);
+
+BEGIN 
+	vn_username := func_create_username(in_ambassador_id);
+	DBMS_OUTPUT.PUT_LINE('*********************************************************');
+	DBMS_OUTPUT.PUT_LINE('The username  is: ' || vn_username);
+END proc_create_amb_username;
+/
+SHOW ERRORS;
+
+
+
+
+--------------------------------------------------------------------------------------------------------------------
+--calculates the total expense of an experience
+--takes in no of people as parameter 
+CREATE OR REPLACE PROCEDURE proc_calc_experience_expense 
+(in_experience_id IN experiences.location_id%TYPE, in_no_of_people IN experiences.no_of_people%TYPE) IS
+vn_expense 	VARCHAR2(255);
+vc_experiencetype VARCHAR2(255);
+
+BEGIN 
+	SELECT experience_type INTO vc_experiencetype FROM experiences WHERE location_id = in_experience_id;
+	vn_expense := func_calc_expense(in_experience_id, in_no_of_people);
+	DBMS_OUTPUT.PUT_LINE('*********************************************************');
+	DBMS_OUTPUT.PUT_LINE('The expense for '|| in_no_of_people|| ' people for the experience '|| vc_experiencetype || ' is: £' || vn_expense);
+END proc_calc_experience_expense;
+/
+SHOW ERRORS;
+
+----------------------------------------------------------------------------------------------------------------------
+EXECUTE proc_count_experience_natures;
+--execute the procedure
+EXECUTE proc_count_addresses;
+--execute the procedure
+EXECUTE proc_count_ambassadors;
+--execute the procedure
+EXECUTE proc_count_locations;
+--execute the procedure
+EXECUTE proc_count_experiences;
+--execute the procedure
+EXECUTE proc_count_exp_ambassadors;
+--execute the procedure
+EXECUTE proc_calc_salary(1);
+--execute the procedure
+EXECUTE proc_create_amb_username(1);
+--execute the procedure
+EXECUTE proc_calc_experience_expense(1, 4);

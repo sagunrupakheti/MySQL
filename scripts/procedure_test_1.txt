@@ -1,0 +1,51 @@
+/*
+	procedure_test_1.txt file
+
+			-has execute statements for procedures
+
+	Group 1-
+		Sagun Rupakheti		- 19436773
+		Grishma Duwadi		- 19436758
+		Samyog Rai			- 19436750
+		Prekshya Neupane	- 19436779	
+
+			@D:\CSY2038_Scripts\DBassignment\procedure_test_1.txt
+
+*/
+
+--to show the successful messages 
+SET SERVEROUTPUT ON;
+
+----------------------------------------------------------------------------------------------
+--proc_add_experience_nature
+EXECUTE proc_add_experience_nature;
+
+----------------------------------------------------------------------------------------------
+--proc_add_address
+
+EXECUTE proc_add_address;
+
+----------------------------------------------------------------------------------------------
+--proc_delete_experience_nature
+
+SELECT seq_experience_nature_id.currval from dual;
+
+EXECUTE proc_delete_experience_nature;
+------------------------------------------------------------------------------------------------
+
+--proc_display_expinfo
+
+EXECUTE proc_display_expinfo('WINE TASTING');
+
+----------------------------------------------------------------------------------------------
+--proc_ambassador_first_name
+
+EXECUTE proc_ambassador_first_name(6);
+
+----------------------------------------------------------------------------------------------
+--proc_ambassador_middle_name
+EXECUTE proc_ambassador_middle_name(6);
+
+----------------------------------------------------------------------------------------------
+--proc_ambassador_last_name
+EXECUTE proc_ambassador_last_name(6);

@@ -1,0 +1,197 @@
+/*
+	trigger_1.txt file
+			-consists of triggers for all tables
+			
+
+	Group 1-
+		Sagun Rupakheti		- 19436773
+		Grishma Duwadi		- 19436758
+		Samyog Rai			- 19436750
+		Prekshya Neupane	- 19436779		
+		
+		@D:\CSY2038_Scripts\DBassignment\triggers_1.txt
+
+*/
+
+----------------------------------------------------------------------------------------------
+
+--check gender of ambassador if male(M) or female(F) or invalid character
+SET SERVEROUTPUT ON;
+CREATE OR REPLACE TRIGGER trig_check_ambassador_gender
+AFTER INSERT OR UPDATE OR DELETE OF gender ON ambassadors
+FOR EACH ROW
+
+DECLARE 
+gender CHAR;
+
+BEGIN
+
+IF :NEW.gender = 'M' THEN
+DBMS_OUTPUT.PUT_LINE('');
+DBMS_OUTPUT.PUT_LINE('******Male ambassador added******');
+ELSIF :NEW.gender = 'F' THEN
+DBMS_OUTPUT.PUT_LINE('');
+DBMS_OUTPUT.PUT_LINE('******Female ambassador added******');
+ELSE
+RAISE_APPLICATION_ERROR(-20000,'*********Invalid value for gender**********');
+END IF;
+END trig_check_ambassador_gender;
+/
+SHOW ERRORS
+
+----------------------------------------------------------------------------------------------
+
+--check the age of ambassador i.e. not less than 20 years 
+CREATE OR REPLACE TRIGGER trig_check_ambassador_age
+AFTER INSERT OR UPDATE OR DELETE OF date_of_birth ON ambassadors
+FOR EACH ROW
+
+DECLARE
+todays_date DATE;
+BEGIN
+	SELECT SYSDATE INTO todays_date FROM DUAL;
+	IF :NEW.date_of_birth < todays_date - (365*20) THEN
+	DBMS_OUTPUT.PUT_LINE('');
+	DBMS_OUTPUT.PUT_LINE('******Successfully added ambassador*******');
+	ELSE
+	RAISE_APPLICATION_ERROR(-20000,'*********Ambassador needs to be above 20 years of age!********');
+	END IF;
+END trig_check_ambassador_age;
+/
+SHOW ERRORS
+
+--------------------------------------------------------------------------------------------------------
+
+--check the new added address for addresses table if the data was already inserted
+CREATE OR REPLACE TRIGGER trig_check_addresses
+BEFORE INSERT OR UPDATE OR DELETE ON addresses
+FOR EACH ROW
+DECLARE
+	vn_count NUMBER(3);
+BEGIN
+	SELECT COUNT(street) INTO vn_count FROM addresses 
+	WHERE street = :NEW.street AND city = :NEW.city AND country = :NEW.country;
+	IF vn_count>0 THEN
+		RAISE_APPLICATION_ERROR (-20000,'**********The address already exists! please enter a new address*********');
+	ELSE
+		DBMS_OUTPUT.PUT_LINE('Successfully added address');
+	END IF;
+END trig_check_addresses;
+/
+SHOW ERRORS
+
+--------------------------------------------------------------------------------------------------------------------
+--check the location name of locations table if the location had already been inserted 
+CREATE OR REPLACE TRIGGER trig_check_location
+BEFORE INSERT OR UPDATE OR DELETE OF location_name ON locations
+FOR EACH ROW
+DECLARE
+	vn_location_counter NUMBER(7);
+BEGIN
+	SELECT COUNT(location_name) INTO vn_location_counter FROM locations 
+	WHERE location_name = :NEW.location_name ;
+	IF vn_location_counter>0 THEN
+		RAISE_APPLICATION_ERROR (-20000,'THE LOCATION ALREADY EXISTS');
+	ELSE
+		DBMS_OUTPUT.PUT_LINE('Successfully added location');
+	END IF;
+END trig_check_location;
+/
+SHOW ERRORS
+
+--------------------------------------------------------------------------------------------------------------
+
+--check number of people if entered any value less than 1 shows error
+CREATE OR REPLACE TRIGGER trig_check_no_of_people
+BEFORE INSERT OR UPDATE OR DELETE OF  no_of_people ON experiences
+FOR EACH ROW
+
+DECLARE 
+no_of_people NUMBER(7);
+BEGIN
+
+	IF :NEW.no_of_people<1 THEN
+		RAISE_APPLICATION_ERROR (-20000,'PLEASE ENTER NO OF PEOPLE GREATER THAN 1');
+	ELSE
+		NULL;
+	END IF;
+END trig_check_no_of_people;
+/
+SHOW ERRORS
+	
+-----------------------------------------------------------------------------------------------------------------	
+ --check experience date if the date entered is greater than the current date
+CREATE OR REPLACE TRIGGER trig_check_experience_date
+BEFORE INSERT OR UPDATE OR DELETE OF  experience_date ON experience_ambassadors
+FOR EACH ROW
+
+DECLARE
+todaysdate DATE;
+experience_date experience_ambassadors.experience_date%TYPE;
+
+BEGIN
+	SELECT sysdate INTO todaysdate FROM DUAL;
+	IF :NEW.experience_date >todaysdate THEN
+		RAISE_APPLICATION_ERROR (-20000,'CANNOT ADD A FUTURE SCHEDULED EXPERIENCE');
+	ELSE
+		NULL;
+	END IF;
+END trig_check_experience_date;
+/
+SHOW ERRORS
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+--show messages while inserting updating or deleting experience natures
+CREATE OR REPLACE TRIGGER trig_display_message
+AFTER INSERT OR UPDATE OR DELETE ON experience_natures
+FOR EACH row
+BEGIN
+	IF INSERTING THEN
+		DBMS_OUTPUT.PUT_LINE('YOU INSERTED A RECORD. EXPERIENCE_ID: '|| :NEW.experience_nature_id);
+	ELSIF UPDATING THEN
+		DBMS_OUTPUT.PUT_LINE('YOU UPDATED A RECORD. EXPERIENCE_ID: '|| :OLD.experience_nature_id);
+	ELSE
+		DBMS_OUTPUT.PUT_LINE('YOU DELETED A RECORD. EXPERIENCE_ID: '|| :OLD.experience_nature_id);
+	END IF;
+END trig_display_message;
+/
+SHOW ERRORS
+
+---------------------------------------------------------------------------------------------------------------------------------------
+
+--checks the experience date added
+--the oldest date can be 9 years back
+--using switch case
+
+CREATE OR REPLACE TRIGGER trig_check_date
+AFTER INSERT OR UPDATE OF experience_date ON experience_ambassadors
+FOR EACH row
+DECLARE
+	todays_date DATE;
+	checkVariable NUMBER(10);
+BEGIN
+	SELECT SYSDATE INTO todays_date FROM DUAL;
+	--check if the date is 5 years back
+	IF :NEW.experience_date > todays_date - (365*5) THEN
+		checkVariable := 0;
+	ELSIF 
+	--check if the date is 10years back
+		:NEW.experience_date < todays_date - (365*10) THEN
+		checkVariable := 1;
+	ELSE
+		checkVariable := 2;
+	END IF;	
+	--Implementation of switch case
+	CASE checkVariable
+		WHEN 0 THEN 
+			DBMS_OUTPUT.PUT_LINE('DATE BEFORE 5 YEARS');
+		WHEN 1 THEN 
+			RAISE_APPLICATION_ERROR (-20000,'ERROR! PLEASE ENTER A RECENT DATE');
+		ELSE 
+			DBMS_OUTPUT.PUT_LINE('SUCCESSFULLY ADDED!');
+	END CASE;
+	
+END trig_check_date;
+/
+SHOW ERRORS

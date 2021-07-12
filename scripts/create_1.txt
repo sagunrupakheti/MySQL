@@ -1,0 +1,149 @@
+/*
+	create_1.txt file
+		-creates tables
+		-creates object types
+		-creates object tables
+		-creates varrays
+		-creates nested tables
+		-creates sequences
+
+	Group 1-
+		Sagun Rupakheti		- 19436773
+		Grishma Duwadi		- 19436758
+		Samyog Rai			- 19436750
+		Prekshya Neupane	- 19436779	
+		
+		@D:\CSY2038_Scripts\DBassignment\create_1.txt
+		
+
+*/
+
+
+
+------------------------to run in the beginning---------------------------------------
+COLUMN object_name FORMAT A30;
+COLUMN object_type FORMAT A12;
+
+
+---------------------------------------------------------------
+--creating experience_natures table
+CREATE TABLE experience_natures(
+experience_nature_id 		NUMBER(7),
+experience_nature_name 		VARCHAR2(50),
+experience_nature_type 		VARCHAR2(50));
+
+
+---------------------------------------------------------------
+--creating sequence for experience_nature_id
+CREATE SEQUENCE seq_experience_nature_id
+INCREMENT BY 1
+START WITH 1
+MINVALUE 1
+MAXVALUE 9999999;
+
+
+---------------------------------------------------------------
+--creating address type
+CREATE OR REPLACE TYPE address_type AS OBJECT (
+street 		VARCHAR2(100),
+city 		VARCHAR2(100),
+country 	VARCHAR2(100) );
+/
+
+
+--creating table of address type 
+CREATE TABLE addresses OF address_type;
+
+---------------------------------------------------------------
+--creating contact type
+CREATE OR REPLACE TYPE contact_type AS OBJECT(
+personal_number 		VARCHAR2(20),
+additional_number 		VARCHAR2(20));
+/
+--creating varray type 
+CREATE TYPE contact_varray_type AS VARRAY(50)OF contact_type;
+/
+---------------------------------------------------------------
+
+--creating table ambassadors
+CREATE TABLE ambassadors(
+ambassador_id 		NUMBER(7),
+ambassador_fname 	VARCHAR2(50),
+ambassador_mname 	VARCHAR2(50),
+ambassador_sname 	VARCHAR2(50),
+gender 				CHAR,
+salary				NUMBER(7,2),
+date_of_birth 		DATE,
+ambassador_address 	address_type,
+contact 			contact_varray_type,
+representative_id 	NUMBER(7));
+---------------------------------------------------------------
+
+--creating sequence for ambassador_id
+CREATE SEQUENCE seq_ambassador_id
+INCREMENT BY 1
+START WITH 1
+MINVALUE 1
+MAXVALUE 9999999;
+---------------------------------------------------------------
+
+--creating table location
+CREATE TABLE locations(
+location_id 		NUMBER(7),
+location_name 		VARCHAR2(50),
+location_address REF address_type SCOPE IS addresses);
+
+---------------------------------------------------------------
+
+--creating sequence for location_id
+CREATE SEQUENCE seq_location_id
+INCREMENT BY 1
+START WITH 1
+MINVALUE 1
+MAXVALUE 9999999;
+
+---------------------------------------------------------------
+
+--creating item type 
+CREATE OR REPLACE TYPE experience_item_type AS OBJECT(
+item_name 		VARCHAR2(50),
+cost 			NUMBER(11) );
+/
+
+--creating item table type 
+CREATE TYPE experience_item_table_type AS TABLE OF experience_item_type;
+/
+
+---------------------------------------------------------------
+
+--creating table experiences
+CREATE TABLE experiences(
+experience_type 		VARCHAR2(50),
+no_of_people 			NUMBER(7),
+rate 					NUMBER(7,2),
+experience_nature_id 	NUMBER(7) NOT NULL,
+location_id 			NUMBER(7) NOT NULL,
+item 					experience_item_table_type)
+NESTED TABLE item STORE AS experience_item_table;
+
+
+---------------------------------------------------------------
+--creating table experience_ambassadors
+CREATE TABLE experience_ambassadors(
+experience_ambassadors_id 		NUMBER(7),
+ambassador_id 					NUMBER(7) ,
+experience_nature_id 			NUMBER(7) NOT NULL,
+location_id 					NUMBER(7) NOT NULL,
+experience_date					DATE);
+
+---------------------------------------------------------------
+--creating sequence for experience_ambassadors_id
+CREATE SEQUENCE seq_experience_ambassadors_id
+INCREMENT BY 1
+START WITH 1
+MINVALUE 1
+MAXVALUE 9999999;
+
+
+
+
