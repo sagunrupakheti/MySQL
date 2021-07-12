@@ -4,14 +4,6 @@
 			-checks the created table with attributes
 			-checks the sequences
 
-	Group 1-
-		Sagun Rupakheti		- 19436773
-		Grishma Duwadi		- 19436758
-		Samyog Rai			- 19436750
-		Prekshya Neupane	- 19436779		
-		
-		@D:\CSY2038_Scripts\DBassignment\create_test_1.txt
-
 */
 
 
