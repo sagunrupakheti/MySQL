@@ -5,15 +5,6 @@
 	-drops the child table related constraints first
 	-followed by the parent table related constraints and tables
 	-to maintain the integrity of constraints
-	
-	GROUP 1- 
-
-		Sagun Rupakheti		- 19436773
-		Grishma Duwadi		- 19436758
-		Samyog Rai			- 19436750
-		Prekshya Neupane	- 19436779	
-		
-		@D:\CSY2038_Scripts\DBassignment\drop_1.txt
 */
 
 --show messages
